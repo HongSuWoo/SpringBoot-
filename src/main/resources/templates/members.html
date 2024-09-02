@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 목록</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .delete-btn {
+            color: red;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<h2>회원 목록</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>아이디</th>
+        <th>이메일</th>
+        <th>동작</th>
+    </tr>
+    </thead>
+    <tbody id="member-list">
+    <!-- JavaScript로 회원 목록을 동적으로 생성할 수 있습니다 -->
+    </tbody>
+</table>
+<p><a href="index.html">로그아웃</a></p>
+
+<script>
+    // 샘플 데이터: 실제로는 서버에서 데이터 가져와야 합니다.
+    const members = [
+        { id: 1, username: 'user1', email: 'user1@example.com' },
+        { id: 2, username: 'user2', email: 'user2@example.com' }
+    ];
+
+    function loadMembers() {
+        const memberList = document.getElementById('member-list');
+        memberList.innerHTML = ''; // 기존 목록 제거
+
+        members.forEach(member => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                    <td>${member.id}</td>
+                    <td>${member.username}</td>
+                    <td>${member.email}</td>
+                    <td><span class="delete-btn" onclick="deleteMember(${member.id})">X</span></td>
+                `;
+            memberList.appendChild(row);
+        });
+    }
+
+    function deleteMember(id) {
+        // 실제 삭제 로직: 서버에 AJAX 요청 보내기 등
+        const memberList = document.getElementById('member-list');
+        const rows = memberList.getElementsByTagName('tr');
+
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const cell = row.getElementsByTagName('td')[0]; // ID 열
+            if (cell && cell.textContent == id) {
+                memberList.removeChild(row);
+                break;
+            }
+        }
+
+        // 여기서 서버로 삭제 요청을 보낼 수 있습니다.
+        // 예를 들어, `fetch` API를 사용할 수 있습니다.
+        // fetch(`/delete-member.php?id=${id}`, { method: 'POST' })
+    }
+
+    // 페이지 로드 시 회원 목록을 불러옵니다.
+    window.onload = loadMembers;
+</script>
+</body>
+</html>
